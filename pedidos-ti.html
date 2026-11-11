@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pedidos à TI</title>
+<!--
+  Página "Pedidos à TI" — protótipo v2 (11/11/2026)
+
+  SUBSTITUIR LOCALMENTE antes de publicar:
+    [NOME-EMPRESA]            texto alternativo do logo
+    [PRAZO-DIAS]              dias úteis de antecedência
+    [LINK-FORM-ADMISSAO]      link do formulário de admissão
+    [LINK-FORM-EMPRESTIMO]    link do formulário de empréstimo
+    [LINK-FORM-MOVIMENTACAO]  link do formulário de desligamento/mudança (quando existir)
+    [NUMERO-WHATSAPP-TI]      só dígitos, com DDI e DDD (ex.: 55 + DDD + número) — usado no link
+    [CONTATO-TI-WHATSAPP]     número formatado para exibição
+    [EMAIL-TI]                e-mail da TI (aparece em 2 lugares)
+
+  LOGO: salvar como logo.png na mesma pasta deste arquivo.
+  CORES: trocar só as variáveis em :root abaixo.
+  Sem recursos externos: abre sem internet, direto da pasta de rede.
+-->
+<style>
+  :root {
+    /* Cor principal da marca: cabeçalho, botões, ícones */
+    --cor-primaria: #0a66b0;
+    /* Versão mais escura: botão ao passar o mouse */
+    --cor-primaria-escura: #084f88;
+    /* Fundo claro de destaques ("Quem preenche") */
+    --cor-primaria-clara: #e8f1fa;
+    /* Fundo da página */
+    --cor-fundo: #f1f4f8;
+    /* Fundo dos cartões */
+    --cor-cartao: #ffffff;
+    /* Texto principal e secundário */
+    --cor-texto: #1f2933;
+    --cor-texto-suave: #5f6b7a;
+    /* Bordas e divisórias */
+    --cor-borda: #dfe4ea;
+    /* Caixa de aviso */
+    --cor-aviso-fundo: #fff1c9;
+    --cor-aviso-borda: #f0c24a;
+    --cor-aviso-icone: #e9a800;
+    /* Itens desabilitados ("em breve") */
+    --cor-desabilitado: #c9cfd6;
+    --cor-desabilitado-texto: #5f6b7a;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--cor-fundo);
+    color: var(--cor-texto);
+    line-height: 1.45;
+  }
+
+  /* ---------- Cabeçalho ---------- */
+  header {
+    background: var(--cor-primaria);
+    color: #fff;
+  }
+  .cabecalho {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 22px 28px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .logo {
+    background: #fff;           /* garante contraste com qualquer versão do logo */
+    border-radius: 10px;
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    min-height: 64px;
+  }
+  .logo img { height: 48px; width: auto; display: block; }
+  .divisor {
+    width: 2px;
+    align-self: stretch;
+    background: rgba(255,255,255,.55);
+  }
+  header h1 { margin: 0; font-size: 2.6rem; line-height: 1.1; }
+  header p  { margin: 4px 0 0; font-size: 1.25rem; opacity: .95; }
+
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 28px 20px;
+  }
+
+  /* ---------- Aviso ---------- */
+  .aviso {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    background: var(--cor-aviso-fundo);
+    border: 1.5px solid var(--cor-aviso-borda);
+    border-radius: 12px;
+    padding: 18px 26px;
+    margin-bottom: 28px;
+  }
+  .aviso-icone {
+    flex: 0 0 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--cor-aviso-icone);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.7rem;
+    font-family: Georgia, serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .aviso ul { margin: 0; padding-left: 20px; }
+  .aviso li { margin: 2px 0; }
+
+  /* ---------- Cartões ---------- */
+  .grade {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  .cartao {
+    position: relative;
+    background: var(--cor-cartao);
+    border: 1px solid var(--cor-borda);
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(16, 42, 67, .06);
+    padding: 24px 26px 26px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .icone { width: 84px; height: 84px; color: var(--cor-primaria); margin-bottom: 10px; }
+  .cartao h2 { margin: 0 0 8px; font-size: 1.35rem; }
+  .cartao p  { margin: 0; color: var(--cor-texto); max-width: 300px; }
+  .linha {
+    width: 100%;
+    height: 1px;
+    background: var(--cor-borda);
+    margin: 18px 0 14px;
+  }
+  .quem {
+    background: var(--cor-primaria-clara);
+    border-radius: 999px;
+    padding: 5px 16px;
+    font-size: .95rem;
+    margin-bottom: 18px;
+  }
+  .quem strong { color: var(--cor-primaria); }
+  .botao {
+    margin-top: auto;
+    width: 100%;
+    display: block;
+    background: var(--cor-primaria);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 12px 16px;
+    border-radius: 8px;
+  }
+  .botao:hover { background: var(--cor-primaria-escura); }
+  .botao:focus-visible,
+  .contato a:focus-visible { outline: 3px solid #f0c24a; outline-offset: 3px; }
+
+  .em-breve .icone { color: var(--cor-texto-suave); }
+  .em-breve .botao {
+    background: var(--cor-desabilitado);
+    color: var(--cor-desabilitado-texto);
+    pointer-events: none;
+    cursor: default;
+  }
+  .selo {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: #e3e7ec;
+    color: var(--cor-texto-suave);
+    font-size: .8rem;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 3px 11px;
+  }
+
+  /* ---------- Outros pedidos ---------- */
+  .outros {
+    margin-top: 28px;
+    background: var(--cor-cartao);
+    border: 1px solid var(--cor-borda);
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(16, 42, 67, .06);
+    padding: 20px 26px 22px;
+  }
+  .outros h2 { margin: 0 0 12px; font-size: 1.3rem; }
+  .contatos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .contato {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 8px 12px;
+  }
+  .contato + .contato { border-left: 1px solid var(--cor-borda); }
+  .contato svg { width: 40px; height: 40px; color: var(--cor-primaria); flex: 0 0 40px; }
+  .contato span { display: block; font-size: 1.15rem; }
+  .contato a { color: var(--cor-primaria); font-weight: 600; text-decoration: none; }
+  .contato a:hover { text-decoration: underline; }
+
+  footer {
+    max-width: 1200px;
+    margin: 26px auto 0;
+    padding: 14px 28px 26px;
+    text-align: center;
+    color: var(--cor-texto-suave);
+    font-size: .9rem;
+  }
+  footer::before {
+    content: "";
+    display: block;
+    height: 1px;
+    background: var(--cor-borda);
+    margin-bottom: 14px;
+  }
+
+  /* ---------- Telas menores ---------- */
+  @media (max-width: 900px) {
+    .grade { grid-template-columns: 1fr; }
+    .contatos { grid-template-columns: 1fr; }
+    .contato + .contato { border-left: 0; border-top: 1px solid var(--cor-borda); }
+    .cabecalho { flex-wrap: wrap; gap: 16px; }
+    .divisor { display: none; }
+    header h1 { font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="cabecalho">
+    <div class="logo"><img src="img/Logo Fibrasca.png" alt="Fibrasca"></div>
+    <div class="divisor" aria-hidden="true"></div>
+    <div>
+      <h1>Formulários TI</h1>
+      <p>Escolha o formulário do seu pedido.</p>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <div class="aviso" role="note">
+    <div class="aviso-icone" aria-hidden="true">i</div>
+    <ul>
+      <li>Entre com o seu e-mail da empresa.</li>
+      <li>Admissão e mudança de setor: avise com <strong>3 dias úteis</strong> de antecedência.</li>
+      <li>Desligamento: avise assim que a decisão for tomada, antes da comunicação ao colaborador.</li>
+    </ul>
+  </div>
+
+  <div class="grade">
+
+    <!-- Para um novo formulário: copiar um <section class="cartao"> inteiro -->
+    <section class="cartao">
+      <svg class="icone" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="26" cy="20" r="11"/>
+        <path d="M6 56c0-11 9-19 20-19s20 8 20 19z"/>
+        <path d="M50 22v16M42 30h16"/>
+      </svg>
+      <h2>Admissão de colaborador</h2>
+      <p>E-mail, sistemas, pastas e equipamento para o primeiro dia.</p>
+      <div class="linha"></div>
+      <div class="quem"><strong>Quem preenche:</strong> gestor ou supervisor</div>
+      <a class="botao" href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=Ye2RXtVcbki-WLeafHtKij50R9OrkelAlOepPxbKzw5URUtKVlpLTkdCUFFXNkQ3RVBMRDQ0SVZFSC4u" target="_blank" rel="noopener">Abrir formulário</a>
+    </section>
+
+    <section class="cartao">
+      <svg class="icone" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="12" y="12" width="40" height="28" rx="3"/>
+        <path d="M4 48h56l-4 5H8z"/>
+        <path d="M28 48h8"/>
+      </svg>
+      <h2>Empréstimo de equipamento</h2>
+      <p>Notebook ou periférico por um período, com data de devolução.</p>
+      <div class="linha"></div>
+      <div class="quem"><strong>Quem preenche:</strong> quem vai usar o equipamento</div>
+      <a class="botao" href="https://forms.cloud.microsoft/pages/responsepage.aspx?id=Ye2RXtVcbki-WLeafHtKit2LccQC5FlBo5DqlAF10RZUQlJHTkZaT0lDVTZDR09XSFU4NjVaN0JONS4u&route=shorturl" target="_blank" rel="noopener">Abrir formulário</a>
+    </section>
+
+    <section class="cartao em-breve">
+      <span class="selo">em breve</span>
+      <svg class="icone" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="24" cy="20" r="11"/>
+        <path d="M4 56c0-11 9-19 20-19 6 0 11 2 15 6"/>
+        <path d="M4 56h30"/>
+        <path d="M42 46h18M53 39l7 7-7 7"/>
+      </svg>
+      <h2>Desligamento ou mudança de setor</h2>
+      <p>Quem assume e quais acessos retirar ou transferir.</p>
+      <div class="linha"></div>
+      <div class="quem"><strong>Quem preenche:</strong> gestor da área ou RH</div>
+      <a class="botao" href="[LINK-FORM-MOVIMENTACAO]" aria-disabled="true" tabindex="-1">Disponível em breve</a>
+    </section>
+
+  </div>
+
+  <section class="outros">
+    <h2>Outros pedidos ou problemas</h2>
+    <div class="contatos">
+      <div class="contato">
+        <!-- Ícone genérico de conversa (não é o logotipo do aplicativo) -->
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M24 6C13.5 6 5 13.6 5 23c0 4.4 1.9 8.4 5 11.4L8 43l9.3-4.2c2.1.7 4.4 1.2 6.7 1.2 10.5 0 19-7.6 19-17S34.5 6 24 6z"/>
+          <path d="M16 20h16M16 27h10"/>
+        </svg>
+        <div>
+          <span>WhatsApp da TI</span>
+          <a href="https://wa.me/554791492169" target="_blank" rel="noopener">+55 47 9149-2169</a>
+        </div>
+      </div>
+      <div class="contato">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="5" y="10" width="38" height="28" rx="3"/>
+          <path d="M6 12l18 14 18-14"/>
+        </svg>
+        <div>
+          <span>E-mail</span>
+          <a href="mailto:ti@fibrasca.com.br">ti@fibrasca.com.br</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>Fibrasca - Equipe de TI</footer>
+
+</body>
+</html>
